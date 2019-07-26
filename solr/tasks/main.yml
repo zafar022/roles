@@ -1,0 +1,20 @@
+---
+- name: Ensure all the dependencies are installed
+  package:
+    name: "{{ item }}"
+    update_cache: yes
+    state: present
+  with_items:
+    - sudo
+    - lsof
+    - unzip
+    - acl
+
+- name: Check for Solr
+  stat:
+    path: "{{ solr_directory_path }}/solr-{{ solr_version }}"
+  register: solr_install_path_status
+
+- name: installing solr on hosts
+  include: install.yml
+  when: solr_install_path_status.stat.isdir is not defined

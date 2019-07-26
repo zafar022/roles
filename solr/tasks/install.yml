@@ -1,0 +1,24 @@
+---
+- name: getting solr url
+  get_url:
+    url: "https://archive.apache.org/dist/lucene/solr/{{ solr_version }}/solr-{{ solr_version }}.tgz"
+    dest: "{{ solr_directory_path }}"
+- name: unarchiving the apache solr package
+  unarchive:
+    src: "{{ solr_directory_path }}/solr-{{ solr_version }}.tgz"
+    dest: "{{ solr_directory_path }}"
+    remote_src: yes
+- name: installation
+  shell: > 
+    {{ solr_directory_path }}/solr-{{ solr_version }}/bin/install_solr_service.sh 
+    {{ solr_directory_path }}/solr-{{ solr_version }}.tgz
+    -s {{ solr_service_name }}
+    -p {{ solr_port }}
+- name: enable the solr service 
+  service:
+    name: solr
+    enabled: yes
+  notify:
+   - restart solr
+
+  

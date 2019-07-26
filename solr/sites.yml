@@ -1,0 +1,7 @@
+---
+- hosts: web-server
+  become: true
+  roles:
+   - solr
+
+  
